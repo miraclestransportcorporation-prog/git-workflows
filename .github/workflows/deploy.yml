@@ -7,11 +7,10 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # <--- Change this from ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Verify HTML Files
+      - name: Sync Files
         run: |
-          echo "Processing HTML files in the main branch..."
-          ls *.html
+          rsync -avz --exclude '.git' . /var/www/html/
