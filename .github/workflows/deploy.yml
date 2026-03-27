@@ -1,19 +1,16 @@
 name: Main Branch Automation
 
-# This section defines the "Triggers"
 on:
-  pull:
+  pull_request:        # Fixed: must be pull_request
     branches:
-      - main  # This ensures it ONLY runs on the main branch
+      - main           # This ensures it ONLY runs on PRs targeting the main branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Verify HTML Files
         run: |
           echo "Processing HTML files in the main branch..."
