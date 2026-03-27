@@ -2,7 +2,7 @@ name: Main Branch Automation
 
 # This section defines the "Triggers"
 on:
-  push:
+  pull:
     branches:
       - main  # This ensures it ONLY runs on the main branch
 
