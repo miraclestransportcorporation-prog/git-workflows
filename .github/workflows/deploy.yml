@@ -1,23 +1,32 @@
 name: Main Branch Automation
 
 on:
+  # Trigger 1: Runs when a Pull Request is opened or updated against main
   pull_request:
+    branches:
+      - main
+  
+  # Trigger 2: Runs when code is actually merged (pushed) into main
+  push:
     branches:
       - main
 
 jobs:
   build-and-deploy:
+    # Use 'self-hosted' since we are deploying to your specific server
     runs-on: self-hosted
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy to Web Root
+      - name: Verify HTML Files
         run: |
-          # We use 'cp' because 'rsync' is not installed on this host.
-          # -r: recursive, -p: preserve permissions
-          # We copy the current directory (.) to the web root.
-          cp -rp . /var/www/html/
-          
-          # Clean up the .git metadata from the live web folder for security
-          rm -rf /var/www/html/.git
+          echo "Processing HTML files..."
+          ls *.html
+
+      - name: Deploy to Web Root
+        # Using 'sudo' here because we saw earlier your user needs it for /var/www/html
+        run: |
+          sudo cp -rp ./* /var/www/html/
+          sudo rm -rf /var/www/html/.git
