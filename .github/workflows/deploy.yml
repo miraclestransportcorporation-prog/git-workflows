@@ -1,0 +1,20 @@
+name: Main Branch Automation
+
+# This section defines the "Triggers"
+on:
+  push:
+    branches:
+      - main  # This ensures it ONLY runs on the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify HTML Files
+        run: |
+          echo "Processing HTML files in the main branch..."
+          ls *.html
