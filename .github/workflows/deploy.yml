@@ -1,16 +1,23 @@
 name: Main Branch Automation
 
 on:
-  pull_request:        # Fixed: must be pull_request
+  pull_request:
     branches:
-      - main           # This ensures it ONLY runs on PRs targeting the main branch
+      - main
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted  # <--- Change this from ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Sync Files
+
+      - name: Deploy to Web Root
         run: |
-          rsync -avz --exclude '.git' . /var/www/html/
+          # We use 'cp' because 'rsync' is not installed on this host.
+          # -r: recursive, -p: preserve permissions
+          # We copy the current directory (.) to the web root.
+          cp -rp . /var/www/html/
+          
+          # Clean up the .git metadata from the live web folder for security
+          rm -rf /var/www/html/.git
